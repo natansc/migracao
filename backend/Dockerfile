@@ -1,34 +1,30 @@
-services:
-  db:
-    image: docker.io/library/postgres:15-alpine
-    container_name: app-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: sua_senha_forte_aqui
-      POSTGRES_DB: trinus_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
+# backend/Dockerfile
 
-  backend:
-    build: ./backend
-    container_name: app-backend
-    restart: unless-stopped
-    environment:
-      - PORT=3001
-      - NODE_ENV=production
-      # O host aqui é 'db', que é o nome do serviço ali em cima!
-      - DATABASE_URL=postgresql://admin:sua_senha_forte_aqui@db:5432/trinus_db?schema=public
-    depends_on:
-      - db
-    ports:
-      - "127.0.0.1:3001:3001"
-    networks:
-      - app-network
+# Estágio 1: Build
+FROM node:20-slim AS builder
+RUN apt-get update && apt-get install -y python3 make g++ openssl
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+# Gera o Prisma Client
+RUN npx prisma generate
+# Compila o NestJS
+RUN npm run build
 
-# ... (frontend e networks)
+# Estágio 2: Produção
+FROM node:20-slim AS production
+RUN apt-get update && apt-get install -y openssl
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-volumes:
-  postgres_data:
+# A MÁGICA ACONTECE AQUI: Copia o Prisma Client já gerado do estágio anterior
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Copia o código compilado
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 3001
+CMD ["node", "dist/main.js"]

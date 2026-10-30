@@ -3,6 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { ApiIntegration, Prisma } from '@prisma/client';
 
+
 @Injectable()
 export class ApiService {
     constructor(private readonly prisma: PrismaService) {}
