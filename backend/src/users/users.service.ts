@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { USER_ROLES, isValidRole, UserRole } from '../auth-sso/user-role';
+import { AuthService } from '../auth/auth.service';
 
 export interface CreateUserDto {
   username: string;
   email?: string;
-  role: UserRole;
+  password: string;
+  role?: UserRole;
 }
 
 export interface UpdateUserDto {
@@ -15,22 +17,30 @@ export interface UpdateUserDto {
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
 
   async ensureDefaultAdmin() {
     const adminUsername = 'natan.costa';
     const adminEmail = 'natan.costa@trinusco.com.br';
+
+    // Define a senha padrão para o primeiro admin
+    const defaultPassword = 'Sup@2022S';
 
     let user = await this.prisma.user.findUnique({
       where: { username: adminUsername },
     });
 
     if (!user) {
+      const hashedPassword = await this.authService.hashPassword(defaultPassword);
       user = await this.prisma.user.create({
         data: {
           username: adminUsername,
           email: adminEmail,
           role: 'ADMIN',
+          password: hashedPassword,
         },
       });
     } else if (user.role !== 'ADMIN') {
@@ -93,11 +103,15 @@ export class UsersService {
       throw new ConflictException(`Usuário '${data.username}' já existe.`);
     }
 
+    // Hash da senha antes de salvar
+    const hashedPassword = await this.authService.hashPassword(data.password);
+
     return this.prisma.user.create({
       data: {
         username: data.username,
         email: data.email || null,
         role: data.role,
+        password: hashedPassword,
       },
       select: {
         id: true,
@@ -120,12 +134,16 @@ export class UsersService {
       throw new BadRequestException(`Role inválido. Valores permitidos: ${USER_ROLES.join(', ')}.`);
     }
 
+    // Se estiver atualizando senha, faz hash da nova senha
+    let updateData: any = { ...(data.role !== undefined && { role: data.role }), ...(data.email !== undefined && { email: data.email }) };
+
+    if (data.password) {
+      updateData.password = await this.authService.hashPassword(data.password);
+    }
+
     return this.prisma.user.update({
       where: { id },
-      data: {
-        ...(data.role !== undefined && { role: data.role }),
-        ...(data.email !== undefined && { email: data.email }),
-      },
+      data: updateData,
       select: {
         id: true,
         username: true,
@@ -143,7 +161,7 @@ export class UsersService {
       throw new NotFoundException(`Usuário ${id} não encontrado.`);
     }
 
-    // Evita excluir o próprio admin default
+    // Evita excluir o admin default
     if (existing.username === 'natan.costa') {
       throw new BadRequestException('Não é possível excluir o administrador padrão natan.costa.');
     }

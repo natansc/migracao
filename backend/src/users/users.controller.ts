@@ -9,10 +9,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth-sso/jwt-auth.guard';
-import { RolesGuard } from '../auth-sso/roles.guard';
-import { Roles } from '../auth-sso/roles.guard';
-import { UserRole } from '../auth-sso/user-role';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.guard';
+import { UserRole } from '../auth/user-role';
 import type { CreateUserDto, UpdateUserDto } from './users.service';
 
 @Controller('users')
