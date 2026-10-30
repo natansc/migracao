@@ -1,0 +1,26 @@
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mDatabaseModule dependencies initialized[39m[38;5;3m +12ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +10ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mApiModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthSsoModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +6ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +6ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mApiController {/api}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/api-list, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/api-get/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/api-create, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/api-update/:id, PUT} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/api-delete/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/login, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/me, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/roles, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21068  - [39m30/10/2026, 12:54:49 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +9ms[39m
