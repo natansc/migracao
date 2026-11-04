@@ -5,11 +5,14 @@ services:
     build:
       context: ./backend
     ports:
-      - "127.0.0.1:3001:3001"
+      - "3001:3001" # Removido o 127.0.0.1 para o Nginx conseguir acessar
     restart: unless-stopped
     environment:
       - PORT=3001
       - NODE_ENV=production
+      # APONTE PARA O IP DA SUA VM (onde o Postgres nativo está rodando)
+      # Troque 'sua_senha_aqui' pela senha do usuário postgres
+      - DATABASE_URL=postgresql://postgres:Sup@2022@172.16.20.9:5432/postgres?schema=public
     networks:
       - app-network
 
@@ -17,7 +20,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "127.0.0.1:8080:80"
+      - "8080:80" # Removido o 127.0.0.1
     restart: unless-stopped
     networks:
       - app-network
