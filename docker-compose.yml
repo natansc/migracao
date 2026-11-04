@@ -12,7 +12,7 @@ services:
       - NODE_ENV=production
       # APONTE PARA O IP DA SUA VM (onde o Postgres nativo está rodando)
       # Troque 'sua_senha_aqui' pela senha do usuário postgres
-      - DATABASE_URL=postgresql://postgres:Sup@2022@172.16.20.9:5432/postgres?schema=public
+      - DATABASE_URL="postgresql://migracao:Sup%402022@172.16.20.9:5432/migracao?schema=public"
     networks:
       - app-network
 
