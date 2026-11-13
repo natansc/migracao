@@ -1,4 +1,6 @@
+
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../database/prisma.service';
 import * as bcrypt from 'bcrypt';
 
@@ -8,7 +10,10 @@ const SESSION_DURATION_MINUTES = 60;
 export class AuthService {
   private constRounds = 10;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     const saltRounds = this.constRounds;
