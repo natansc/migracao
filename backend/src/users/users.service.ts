@@ -85,6 +85,7 @@ export class UsersService implements OnModuleInit {
         role: true,
         createdAt: true,
         updatedAt: true,
+        password: true,
       },
     });
 
