@@ -21,7 +21,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-4 text-base text-white/80">
             Acesse o painel gerencial para acompanhar jobs, validar registros e
-            auditar o processo de migração do AZO.
+            auditar o processo de migração.
           </p>
         </div>
 

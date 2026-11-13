@@ -1,26 +1,31 @@
-import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, BadRequestException, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { USER_ROLES, isValidRole, UserRole } from '../auth-sso/user-role';
 import { AuthService } from '../auth/auth.service';
 
 export interface CreateUserDto {
   username: string;
   email?: string;
   password: string;
-  role?: UserRole;
+  role?: string;
 }
 
 export interface UpdateUserDto {
-  role?: UserRole;
+  role?: string;
   email?: string;
+  password?: string;
 }
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     private readonly prisma: PrismaService,
     private readonly authService: AuthService,
   ) {}
+
+  async onModuleInit() {
+    // Garante que o admin padrão seja criado quando o serviço for inicializado
+    await this.ensureDefaultAdmin();
+  }
 
   async ensureDefaultAdmin() {
     const adminUsername = 'natan.costa';
@@ -90,11 +95,13 @@ export class UsersService {
     return user;
   }
 
-  async create(data: CreateUserDto) {
-    if (!isValidRole(data.role)) {
-      throw new BadRequestException(`Role inválido. Valores permitidos: ${USER_ROLES.join(', ')}.`);
-    }
+  async findOneByUsername(username: string) {
+    return this.prisma.user.findUnique({
+      where: { username },
+    });
+  }
 
+  async create(data: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
       where: { username: data.username },
     });
@@ -128,10 +135,6 @@ export class UsersService {
     const existing = await this.prisma.user.findUnique({ where: { id } });
     if (!existing) {
       throw new NotFoundException(`Usuário ${id} não encontrado.`);
-    }
-
-    if (data.role !== undefined && !isValidRole(data.role)) {
-      throw new BadRequestException(`Role inválido. Valores permitidos: ${USER_ROLES.join(', ')}.`);
     }
 
     // Se estiver atualizando senha, faz hash da nova senha

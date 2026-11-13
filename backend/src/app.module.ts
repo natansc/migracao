@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { ApiModule } from './api/api.module';
+import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+// ... outros imports
 
 @Module({
-  imports: [ApiModule, AuthModule, DatabaseModule, UsersModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // <-- Isso carrega o arquivo .env
+    DatabaseModule,
+    // ... outros módulos
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -65,7 +65,7 @@ export function LoginForm() {
           Bem-vindo
         </h1>
         <p className="mt-2 text-sm text-[#5C5E61]">
-          Acesse o sistema de migração com suas credenciais AZO.
+          Acesse o sistema de migração com suas credenciais.
         </p>
       </div>
 
@@ -129,7 +129,7 @@ export function LoginForm() {
       </form>
 
       <p className="mt-6 text-center text-xs text-[#9A9B9E]">
-        Autenticação integrada ao AZO (SSO).
+        Autenticação com senha do banco de dados.
       </p>
     </div>
   );

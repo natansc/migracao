@@ -1,0 +1,7 @@
+# Prisma configuration
+includes:
+  - ./seed.ts
+
+secret: ${env:PRISMA_SECRET}
+
+endpoint: ${env:DATABASE_URL}
