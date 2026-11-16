@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -13,6 +13,6 @@ export class AuthController {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    return user;
+    return this.authService.generateToken(user);
   }
 }

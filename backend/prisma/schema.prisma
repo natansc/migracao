@@ -4,7 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
@@ -35,11 +35,9 @@ model User {
   email     String?  @unique
   role      String   @default("VISUALIZACAO")
   password  String   // Senha hash para autenticação local
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   lastLogin DateTime? // Último login para controle de sessão
-
   apiIntegrations ApiIntegrationUser[]
 }
 

@@ -22,12 +22,17 @@ export function LoginForm() {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, pass: password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
-        setError("Não foi possível conectar ao servidor. Tente novamente.");
-        return;
+        const errorData = await response.json().catch(() => null);
+        
+        // Usamos console.warn em vez de console.error para não disparar 
+        // a tela de erro (overlay) do Next.js em desenvolvimento.
+        console.warn("Aviso de Login:", response.status, errorData);
+        
+        throw new Error(errorData?.message || `Erro ${response.status} no servidor`);
       }
 
       const data = (await response.json()) as {
@@ -51,8 +56,9 @@ export function LoginForm() {
 
       router.push("/dashboard");
       router.refresh();
-    } catch {
-      setError("Não foi possível conectar ao servidor. Tente novamente.");
+    } catch (error: any) {
+      // O erro cai aqui e é exibido na tela de forma amigável
+      setError(error?.message || "Não foi possível conectar ao servidor.");
     } finally {
       setLoading(false);
     }

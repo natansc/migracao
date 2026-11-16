@@ -28,15 +28,25 @@ export class AuthService {
           { email: usernameOrEmail },
         ],
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        password: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        lastLogin: true,
+      },
     });
 
     if (!user || !user.password) {
-      throw new UnauthorizedException('Usuário ou senha inválidos.');
+      return null;
     }
 
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
-      throw new UnauthorizedException('Usuário ou senha inválidos.');
+      return null;
     }
 
     const { password: _password, ...result } = user;
@@ -45,14 +55,36 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const user = await this.validateUser(username, password);
-    
+    if (!user) {
+      throw new UnauthorizedException('Usuário ou senha inválidos.');
+    }
+
     // Atualiza o último login do usuário
     await this.prisma.user.update({
       where: { username: user.username },
       data: { lastLogin: new Date() },
     });
-    
+
     return user;
+  }
+
+  async generateToken(user: { username: string; role: string; id?: number }) {
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      role: user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      autorizado: true,
+      accessToken,
+      usuario: {
+        username: user.username,
+        role: user.role,
+      },
+    };
   }
 
   // Verifica se a sessão do usuário ainda é válida (baseado no último login)
